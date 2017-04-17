@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+		<meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport" />
+		<link rel="alternate" type="application/rss+xml" title="" href="http://tech.vg.no/feed/" />
+		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://tech.vg.no/wp-content/themes/vg-tech/gfx/apple-touch-icon-114x114-precomposed.png" />
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://tech.vg.no/wp-content/themes/vg-tech/gfx/apple-touch-icon-72x72-precomposed.png" />
+		<link rel="apple-touch-icon-precomposed" href="http://tech.vg.no/wp-content/themes/vg-tech/gfx/apple-touch-icon-57x57-precomposed.png" />
+		<link rel="shortcut icon" href="http://tech.vg.no/wp-content/themes/vg-tech/gfx/apple-touch-icon-114x114-precomposed.png" />
+        <meta property="og:title" content=" &#8211; Speed up websites using DNS prefetching" />
+<meta property="og:type" content="article" />
+<meta property="og:image" content="http://tech.vg.no/wp-content/themes/vg-tech/gfx/apple-touch-icon-114x114-precomposed.png" />
+<meta property="og:url" content="http://tech.vg.no/2013/02/09/speed-up-websites-using-dns-prefetching/" />
+<meta property="og:site_name" content="VG Tech" />
+<meta property="og:description" content="VG Tech is a blog where the developers and devops of Norways most visited website share code and tricks of the trade" />
+		<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="VG Tech &raquo; Speed up websites using DNS prefetching Comments Feed" href="http://tech.vg.no/2013/02/09/speed-up-websites-using-dns-prefetching/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/tech.vg.no\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.3"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-polls-css'  href='http://tech.vg.no/wp-content/plugins/wp-polls/polls-css.css?ver=2.73.2' type='text/css' media='all' />
+<style id='wp-polls-inline-css' type='text/css'>
+.wp-polls .pollbar {
+	margin: 1px;
+	font-size: -2px;
+	line-height: px;
+	height: px;
+	background-image: url('http://tech.vg.no/wp-content/plugins/wp-polls/images/pollbg.gif');
+	border: 1px solid #;
+}
+
+</style>
+<link rel='stylesheet' id='wordpress-popular-posts-css'  href='http://tech.vg.no/wp-content/plugins/wordpress-popular-posts/style/wpp.css?ver=3.3.4' type='text/css' media='all' />
+<!-- This site uses the Google Analytics by MonsterInsights plugin v6.0.14 - Using Analytics tracking - https://www.monsterinsights.com/ -->
+<script type="text/javascript" data-cfasync="false">
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
+
+	__gaTracker('create', 'UA-26710730-1', 'auto');
+	__gaTracker('set', 'forceSSL', true);
+	__gaTracker('send','pageview');
+</script>
+<!-- / Google Analytics by MonsterInsights -->
+<script type='text/javascript' src='http://tech.vg.no/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://tech.vg.no/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='http://tech.vg.no/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://tech.vg.no/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://tech.vg.no/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.7.3" />
+<link rel="canonical" href="http://tech.vg.no/2013/02/09/speed-up-websites-using-dns-prefetching/" />
+<link rel='shortlink' href='http://wp.me/p-ae' />
+<link rel="alternate" type="application/json+oembed" href="http://tech.vg.no/wp-json/oembed/1.0/embed?url=http%3A%2F%2Ftech.vg.no%2F2013%2F02%2F09%2Fspeed-up-websites-using-dns-prefetching%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://tech.vg.no/wp-json/oembed/1.0/embed?url=http%3A%2F%2Ftech.vg.no%2F2013%2F02%2F09%2Fspeed-up-websites-using-dns-prefetching%2F&#038;format=xml" />
+				<!-- WordPress Popular Posts v3.3.4 -->
+				<script type="text/javascript">
+
+					var sampling_active = 0;
+					var sampling_rate   = 100;
+					var do_request = false;
+
+					if ( !sampling_active ) {
+						do_request = true;
+					} else {
+						var num = Math.floor(Math.random() * sampling_rate) + 1;
+						do_request = ( 1 === num );
+					}
+
+					if ( do_request ) {
+
+						/* Create XMLHttpRequest object and set variables */
+						var xhr = ( window.XMLHttpRequest )
+						  ? new XMLHttpRequest()
+						  : new ActiveXObject( "Microsoft.XMLHTTP" ),
+						url = 'http://tech.vg.no/wp-admin/admin-ajax.php',
+						params = 'action=update_views_ajax&token=769aaecbd0&wpp_id=634';
+						/* Set request method and target URL */
+						xhr.open( "POST", url, true );
+						/* Set request header */
+						xhr.setRequestHeader( "Content-type", "application/x-www-form-urlencoded" );
+						/* Hook into onreadystatechange */
+						xhr.onreadystatechange = function() {
+							if ( 4 === xhr.readyState && 200 === xhr.status ) {
+								if ( window.console && window.console.log ) {
+									window.console.log( xhr.responseText );
+								}
+							}
+						};
+						/* Send request */
+						xhr.send( params );
+
+					}
+
+				</script>
+				<!-- End WordPress Popular Posts v3.3.4 -->
+						<title>Speed up websites using DNS prefetching &#8211; VG Tech</title><link href="http://tech.vg.no/wp-content/themes/vg-tech/stylesheets/tightness.css?17" media="screen" rel="stylesheet" type="text/css" /><link href="http://tech.vg.no/wp-content/themes/vg-tech/stylesheets/application.css?17" media="screen" rel="stylesheet" type="text/css" /><link href="http://tech.vg.no/wp-content/themes/vg-tech/stylesheets/jobs.css?17" media="screen" rel="stylesheet" type="text/css" /><link href="http://tech.vg.no/wp-content/themes/vg-tech/stylesheets/vendors/syntaxhighlighter/shCore.css?17" media="screen" rel="stylesheet" type="text/css" /><link href="http://tech.vg.no/wp-content/themes/vg-tech/stylesheets/vendors/syntaxhighlighter/shThemeVG.css?17" media="screen" rel="stylesheet" type="text/css" /><link href="http://tech.vg.no/wp-content/themes/vg-tech/stylesheets/vendors/facebox.css?17" media="screen" rel="stylesheet" type="text/css" /><script src="http://tech.vg.no/wp-content/themes/vg-tech/javascripts/vendors/modernizr.min.js" type="text/javascript"></script>	</head>
+	<body class="post-template-default single single-post postid-634 single-format-standard blog" data-base="http://tech.vg.no" data-theme-base="http://tech.vg.no/wp-content/themes/vg-tech">
+
+		<div id="wrapper">
+			<div id="menu">
+				<h1><a href="http://tech.vg.no/">VG Tech</a></h1>
+				<nav>
+					<ul>
+						<li class="blog"><a href="http://tech.vg.no/">Blog</a></li>
+						<li class="about"><a href="http://tech.vg.no/about/">About</a></li>
+						<li class="jobs">
+															<i class="badge">2</i>
+														<a href="http://tech.vg.no/jobs/">Jobs</a>						</li>
+					</ul>
+				</nav>
+			</div>
+			<div id="main">
+				<header>
+	<div class="about panel">
+		<div class="wrap">
+            <p>VGTech is a blog where the developers and devops of Norways most visited website share code and tricks of the trade&#8230; <a class="read_more" href="http://tech.vg.no/about/">Read more</a></p>
+		</div>
+	</div>
+	<div class="panel">
+		<div class="wrap">
+			<form class="search" action="http://tech.vg.no/" method="get">
+	<input class="search_term" name="s" placeholder="Search" type="text">
+	<input class="submit" type="submit" value="Search">
+</form>			<div class="links">
+				<ul>
+											<li><a class="categories" id="categories_opener" href="/archive"><span></span>View archive</a></li>
+										<li><a class="rss" href="http://tech.vg.no/feed/"><span></span>Subscribe via RSS</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<hr class="top_divider">
+	<hr class="divider">
+			<div class="notification">
+			Are you brilliant? We're hiring. <a onclick="javascript:_gaq.push(['_trackEvent', 'Clicks', 'We are hiring']);" href="http://tech.vg.no/jobs">Read more</a>		</div>
+	</header>
+<article>
+			<h1>Speed up websites using DNS prefetching</h1>
+		<div class="byline">
+		by <span>Espen Hovlandsdal</span> in
+		<a href="http://tech.vg.no/category/frontend/">Frontend</a>	</div>
+	<div class="meta">
+		<a class="category frontend" href="http://tech.vg.no/category/frontend/"><span></span>Frontend</a><time datetime="2013-02-09T11:51:58+00:00">09 Feb</time>	</div>
+	<div class="content">
+		<p>We recently added a couple of lines of HTML to our mobile website that potentially speeds it up for users with recent browsers (Chrome and Firefox, at the time of writing). The technique might not work for all sites, but it applied very well to ours. I&#8217;ll explain how and why<span id="more-634"></span>:</p>
+<ul>
+<li>You add a <code>&lt;link rel="dns-prefetch" href="//1.vgc.no" /&gt;</code> tag to the &lt;head&gt; of your site.</li>
+<li>The hostname you specify will be resolved by the browser in an asynchronous fashion</li>
+<li>When resources located at this hostname is to be loaded, the hostname is already mapped to an IP-address and thus the request takes less time</li>
+</ul>
+<p>The solution works well on our site for the following reasons:</p>
+<ul>
+<li>We load resources from many different hostnames &#8211; mostly to get around a bug in Safari for iOS that we&#8217;ve written about earlier</li>
+<li>We lazy-load images on our site to reduce the bandwidth. For each image located on a hostname the browser has not resolved, there is first a DNS lookup and then the actual request to load the image. On mobile devices with high-latency connections, doing the DNS lookup as early as possible is a big win in terms of performance</li>
+<li>Unfortunately, some of the ad-systems we use load in a synchronous way, blocking the rest of the page from loading. While this is happening, we can still resolve the hostnames so they are ready to use.</li>
+</ul>
+<p style="text-align: center">
+<a href="http://tech.vg.no/files/2013/02/before.png"><img src="http://tech.vg.no/files/2013/02/before-300x209.png" alt="Without DNS prefetching" width="300" height="209" class="size-medium wp-image-651" style="margin: 0 auto" srcset="http://tech.vg.no/files/2013/02/before-300x209.png 300w, http://tech.vg.no/files/2013/02/before.png 562w" sizes="(max-width: 300px) 100vw, 300px" /></a> Without DNS prefetching</p>
+<p style="text-align: center">
+<a href="http://tech.vg.no/files/2013/02/after.png"><img src="http://tech.vg.no/files/2013/02/after-300x210.png" alt="With DNS prefetching" width="300" height="210" class="size-medium wp-image-650" style="margin: 0 auto" srcset="http://tech.vg.no/files/2013/02/after-300x210.png 300w, http://tech.vg.no/files/2013/02/after.png 701w" sizes="(max-width: 300px) 100vw, 300px" /></a> With DNS prefetching</p>
+<p>As you can see from the screenshots above, we gained quite a bit of performance from this little trick. There are a number of reasons why this might not work as well for your site, however:</p>
+<ul>
+<li>If your markup is loaded and parsed quickly enough, the DNS resolving won&#8217;t be finished before it starts loading resources from the domains you&#8217;ve specified</li>
+<li>You might be loading few resources, or the resources you load are located on the same hostname</li>
+</ul>
+<p>If you think this technique might help your site, give it a try! It&#8217;s just a line or two of HTML, and it&#8217;s pretty easy to see how it affects your website using for example <a href="http://www.webpagetest.org/">WebPageTest.org</a>. Make sure you pick a browser that supports DNS-prefetching (Chrome, for example).</p>
+	</div>
+	<div class="author_share_container">
+  <div class="author">
+    <img src="http://tech.vg.no/wp-content/themes/vg-tech/gfx/authors/espenh.jpg">
+    <p>Developer at VG with a passion for Node.js, React, PHP and the web platform as a whole. <a href="http://espen.codes/">espen.codes</a> - <a href="http://twitter.com/#!/rexxars">@rexxars</a></p>
+  </div>
+  <div class="share">
+    <div class="sharecontainer">
+        <div class="twitter">
+        <a href="https://twitter.com/share?url=http://tech.vg.no/2013/02/09/speed-up-websites-using-dns-prefetching/" class="twitter-share-button" data-count="none">Tweet</a>
+      </div>
+      <div class="facebook" style="width:42px">
+        <div class="fb-like" data-send="false" data-layout="button_count" data-width="42" data-show-faces="false" data-href="http://tech.vg.no/2013/02/09/speed-up-websites-using-dns-prefetching/"></div>
+      </div>
+      <div class="google">
+        <div class="g-plusone" data-size="medium" data-annotation="none" data-href="http://tech.vg.no/2013/02/09/speed-up-websites-using-dns-prefetching/"></div>
+      </div>
+      <div class="linkedin">
+        <script type="IN/Share" data-counter="right" data-url="http://tech.vg.no/2013/02/09/speed-up-websites-using-dns-prefetching/"></script>
+      </div>
+    </div>
+  </div>
+  <hr>
+</div>
+<div class="recent_posts">
+	<h2>Recent posts in <a href="http://tech.vg.no/category/frontend/">Frontend</a></h2>
+	<ul>
+					<li><a href="http://tech.vg.no/2016/04/20/roc-%e2%80%8aone-approach-to-javascript-fatigue/">Roc  —  One solution to JavaScript Fatigue</a></li>
+					<li><a href="http://tech.vg.no/2016/04/18/rethinking-js/">Rethinking modern JavaScript development</a></li>
+					<li><a href="http://tech.vg.no/2015/11/13/be-environment-aware/">Be environment aware!</a></li>
+					<li><a href="http://tech.vg.no/2015/02/16/clean-and-simple-z-index-with-sass-lists/">Clean and simple Z-index with SASS lists</a></li>
+					<li><a href="http://tech.vg.no/2014/08/08/light-introduction-to-web-components/">Light introduction to Web Components</a></li>
+			</ul>
+</div>
+	<div class="comments"><h2><span>6 comments</span></h2><ul><li class="comment even thread-even depth-1" id="li-comment-6582">
+	<img alt='' src='http://2.gravatar.com/avatar/b84e359142c11f2ed62725622e9a7350?s=62&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/b84e359142c11f2ed62725622e9a7350?s=124&amp;d=mm&amp;r=g 2x' class='avatar avatar-62 photo' height='62' width='62' />	<h3>
+		<a href="http://www.deluxeblogtips.com">Tran Ngoc Tuan Anh</a><time datetime="2013-02-09T12:47:29+00:00">218 week 2 days ago</time>	</h3>
+	<p>Nice. Can we use this technique for all types of domain? I mean not only our domain, subdomains, but also any external domain?</p>
+	        <hr>
+    <ul class="children">
+<li class="comment byuser comment-author-espenh bypostauthor odd alt depth-2" id="li-comment-6583">
+	<img alt='' src='http://0.gravatar.com/avatar/368f9b64e2a428c1491564f58d7ab638?s=62&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/368f9b64e2a428c1491564f58d7ab638?s=124&amp;d=mm&amp;r=g 2x' class='avatar avatar-62 photo' height='62' width='62' />	<h3>
+		<a href="http://rexxars.com/">Espen Hovlandsdal</a><time datetime="2013-02-09T12:50:15+00:00">218 week 2 days ago</time>	</h3>
+	<p>Absolutely. We use it for our CDN, which is a different domain than our main site (to avoid sending cookies for static requests).</p>
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+<li class="comment even thread-odd thread-alt depth-1" id="li-comment-8869">
+	<img alt='' src='http://1.gravatar.com/avatar/7041fb59566caeb0ccf771309b7667b6?s=62&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/7041fb59566caeb0ccf771309b7667b6?s=124&amp;d=mm&amp;r=g 2x' class='avatar avatar-62 photo' height='62' width='62' />	<h3>
+		<a href="http://www.finanznachrichten.de">Markus</a><time datetime="2013-03-23T04:31:52+00:00">212 week 2 days ago</time>	</h3>
+	<p>Did you only include the DNS prefetching for FF/Chrome in your header or did you also include the prefetching for IE9?<br />
+<br />
+E.g.:<br />
+---<br />
+<code>&lt;link rel="prefetch" href="http://www.example.com/someresource.htm"&gt;</code><br />
+---<br />
+<br />
+As described here:<br />
+<a href="http://blogs.msdn.com/b/ie/archive/2011/03/17/internet-explorer-9-network-performance-improvements.aspx" rel="nofollow">http://blogs.msdn.com/b/ie/archive/2011/03/17/internet-explorer-9-network-performance-improvements.aspx</a><br />
+<br />
+<br />
+In the statistics of our German financial news website the IE9 has a share of around 15 % of our traffic and FF/Chrome has a share of around 40 %.</p>
+	        <hr>
+    <ul class="children">
+<li class="comment byuser comment-author-espenh bypostauthor odd alt depth-2" id="li-comment-9050">
+	<img alt='' src='http://0.gravatar.com/avatar/368f9b64e2a428c1491564f58d7ab638?s=62&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/368f9b64e2a428c1491564f58d7ab638?s=124&amp;d=mm&amp;r=g 2x' class='avatar avatar-62 photo' height='62' width='62' />	<h3>
+		<a href="http://rexxars.com/">Espen Hovlandsdal</a><time datetime="2013-03-24T12:05:56+00:00">212 week 19 hr ago</time>	</h3>
+	<p>We only included DNS-prefetching so far. The only problem with the prefetch header is that (as far as I can tell) Firefox and Chrome actually retrieves the resource at the given location instead of just resolving the hostname.<br />
+<br />
+It seems IE9 only resolves the hostname. It might make sense to include the prefetch meta-tag within a conditional comment. I'll give this a try and do some benchmarks.</p>
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+<li class="comment even thread-even depth-1" id="li-comment-9066">
+	<img alt='' src='http://1.gravatar.com/avatar/7041fb59566caeb0ccf771309b7667b6?s=62&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/7041fb59566caeb0ccf771309b7667b6?s=124&amp;d=mm&amp;r=g 2x' class='avatar avatar-62 photo' height='62' width='62' />	<h3>
+		<a href="http://www.finanznachrichten.de">Markus</a><time datetime="2013-03-24T15:37:38+00:00">212 week 15 hr ago</time>	</h3>
+	<p>Cool and thanks for your effort, I am already very curious about your test results! :-)<br />
+<br />
+And it's a pity that this tag does not open an Initial Connection.<br />
+<br />
+When I look at the statistics at WPT, I notice that most DNS requests are quite fast, but the initial connection with the other server can take 'some' time ...</p>
+	        <hr>
+    </li><!-- #comment-## -->
+<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-20077">
+	<img alt='' src='http://0.gravatar.com/avatar/6290696b87f47a149c86b1dbb8891da6?s=62&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/6290696b87f47a149c86b1dbb8891da6?s=124&amp;d=mm&amp;r=g 2x' class='avatar avatar-62 photo' height='62' width='62' />	<h3>
+		<a href="http://kj-prince.com">KJ Prince</a><time datetime="2013-06-04T17:51:04+00:00">202 week 6 days ago</time>	</h3>
+	<p>I'm testing this on a Shopify store at the moment, will report back with results. Thanks for the advice.</p>
+	        <hr>
+    </li><!-- #comment-## -->
+</ul></div><div class="leave_comment" id="respond">
+	<h2>Leave your comment</h2>
+	<form action="http://tech.vg.no/wp-comments-post.php" method="post">
+		<div class="wrapper">
+			<div class="author">
+				<input class="name" placeholder="Name" name="author">
+				<input class="email" placeholder="Email" name="email">
+				<input class="website" placeholder="Website (optional)" name="url">
+			</div>
+			<div class="comment">
+				<div class="wrapper">
+		  			<textarea class="comment" placeholder="Comment" name="comment"></textarea>
+				</div>
+			</div>
+		</div>
+		<input type="submit" class="submitbtn" value="Comment">
+		<input type='hidden' name='comment_post_ID' value='634' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+	</form>
+</div>
+</article>
+			</div>
+			<footer>
+				<hr class="divider">
+				<nav>
+					<ul class="left">
+						<li><a href="http://tech.vg.no/">Blog</a></li>
+						<li><a href="http://tech.vg.no/about/">About</a></li>
+						<li><a href="http://tech.vg.no/archive/">Archive</a></li>
+					</ul>
+					<ul class="right">
+                        <li><a href="http://tech.vg.no/feed/">Subscribe via RSS</a></li>
+					</ul>
+                </nav>
+
+                <div id="colophon">
+		    <p>
+		       <strong>Ansvarlig redaktør og administrerende direktør:</strong> Gard Steiro<br />
+		       <strong>Politisk redaktør:</strong> Hanne Skartveit<br />
+		       <strong>Digitalredaktør:</strong> Ola E. Stenberg<br />
+		       <strong>Magasinredaktør:</strong> Jane Throndsen<br />
+		    </p>
+                    <p>If you have questions and feedback, feel free to <a href="mailto:tech@vg.no">contact us</a>.</p>
+
+                    <p>&copy; 2017 Verdens Gang AS</p>
+                </div>
+			</footer>
+		</div>
+		<!-- /2013/02/09/speed-up-websites-using-dns-prefetching/ -->
+<!-- Tracking code -->
+
+<script src="/wp-content/unispring.js"></script>
+<script type="text/javascript">
+
+function inIframe () {
+  try {
+    return window.self !== window.top;
+  } catch (e) {
+    return true;
+  }
+}
+
+/* <![CDATA[ */
+
+if(!inIframe()) {
+  var measurement = { "s": "vg", "cp": "vgnett/blogg/techblogg", "url": window.location.toString() };
+  unispring.c(measurement);
+}
+/* ]]> */
+</script>
+
+<noscript>
+  <div><img width="1" height="1" src="http://vg.tns-cs.net/j0=,,,;+,cp=vgnett/blogg/techblogg;;;" alt="" /></div>
+</noscript>
+
+<script type="text/javascript">
+xtnv = document;
+xtsd = "http://logc189";
+xtsite = "543510";
+xtn2 = "45";
+xtpage = "Blogg::Tech.vg::634_2013_02_09_speed-up-websites-using-dns-prefetching";
+xtdi = "";
+</script>
+
+<script type="text/javascript" src="/wp-content/xtcore.js"></script>
+
+<noscript>
+  <img width="1" height="1" alt="" src="http://logc189.xiti.com/hit.xiti?s=543510&s2=45&p=Blogg::Tech.vg::634_2013_02_09_speed-up-websites-using-dns-prefetching&di=&" >
+</noscript>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var pollsL10n = {"ajax_url":"https:\/\/tech.vg.no\/wp-admin\/admin-ajax.php","text_wait":"Your last request is still being processed. Please wait a while ...","text_valid":"Please choose a valid poll answer.","text_multiple":"Maximum number of choices allowed: ","show_loading":"0","show_fading":"0"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://tech.vg.no/wp-content/plugins/wp-polls/polls-js.js?ver=2.73.2'></script>
+<script type='text/javascript' src='http://tech.vg.no/wp-includes/js/wp-embed.min.js?ver=4.7.3'></script>
+<script type='text/javascript' src='http://tech.vg.no/wp-includes/js/comment-reply.min.js?ver=4.7.3'></script>
+<!--stats_footer_test--><script src="http://tech.vg.no/wp-content/themes/vg-tech/javascripts/vendors/jquery.min.js" type="text/javascript"></script><script src="http://tech.vg.no/wp-content/themes/vg-tech/javascripts/util.js" type="text/javascript"></script><script src="http://tech.vg.no/wp-content/themes/vg-tech/javascripts/application.js" type="text/javascript"></script><script src="http://tech.vg.no/wp-content/themes/vg-tech/javascripts/vendors/syntaxhighlighter/shCore.js" type="text/javascript"></script><script src="http://tech.vg.no/wp-content/themes/vg-tech/javascripts/vendors/syntaxhighlighter/shAutoloader.js" type="text/javascript"></script><script src="http://tech.vg.no/wp-content/themes/vg-tech/javascripts/vendors/facebox.js" type="text/javascript"></script>	</body>
+</html>
